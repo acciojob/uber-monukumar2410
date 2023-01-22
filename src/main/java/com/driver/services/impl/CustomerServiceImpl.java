@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public void cancelTrip(Integer tripId){
 		//Cancel the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking trip = tripBookingRepository2.findById(tripId).get();
-		trip.setTripStatus(TripStatus.CANCELED);
+		trip.setStatus(TripStatus.CANCELED);
 		trip.setDistanceInKm(0);
 		trip.setFromLocation(null);
 		trip.setToLocation(null);
@@ -75,7 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public void completeTrip(Integer tripId){
 		//Complete the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking trip = tripBookingRepository2.findById(tripId).get();
-		trip.setTripStatus(TripStatus.COMPLETED);
+		trip.setStatus(TripStatus.COMPLETED);
 		
 		
 
