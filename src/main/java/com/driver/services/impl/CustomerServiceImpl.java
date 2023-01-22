@@ -5,6 +5,7 @@ import com.driver.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.driver.model.Cab;
 import com.driver.model.Customer;
 import com.driver.model.Driver;
 import com.driver.repository.CustomerRepository;
@@ -53,10 +54,24 @@ public class CustomerServiceImpl implements CustomerService {
 
 		Customer customer = customerRepository2.findById(customerId).get();
 
-		List<TripBooking> list = new ArrayList<>();
+		List<TripBooking> list = customer.getTripBookingList();
 		list.add(trip);
 
 		trip.setCustomer(customer);
+        
+		int id =-1;
+		List<Driver> drivers = driverRepository2.findAll();
+		for(Driver driver: drivers){
+		    if(driver.getCab().getAvailable()==true){
+                id = Math.min(id,driver.getDriverId());
+			}
+		}
+		if(id==-1){
+			throw new Exception("No cab available!");
+		}
+		Driver driver = driverRepository2.findById(id).get();
+		List<TripBooking> list2 = driver.getTripBookingList();
+		list2.add(trip);
 
 	    tripBookingRepository2.save(trip);
 
