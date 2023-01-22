@@ -55,7 +55,7 @@ public class TripBooking {
         return distanceInKm;
     }
 
-    public TripStatus getTripStatus() {
+    public TripStatus getStatus() {
         return tripStatus;
     }
 
