@@ -48,11 +48,6 @@ public class CustomerServiceImpl implements CustomerService {
 		//Book the driver with lowest driverId who is free (cab available variable is Boolean.TRUE). If no driver is available, throw "No cab available!" exception
 		//Avoid using SQL query
         TripBooking trip = new TripBooking();
-		trip.setFromLocation(fromLocation);
-		trip.setDistanceInKm(distanceInKm);
-		trip.setToLocation(toLocation);
-
-		
         
 		int id =-1;
 		List<Driver> drivers = driverRepository2.findAll();
@@ -65,17 +60,23 @@ public class CustomerServiceImpl implements CustomerService {
 			throw new Exception("No cab available!");
 		}
 		Driver driver = driverRepository2.findById(id).get();
+
+		trip.setFromLocation(fromLocation);
+		trip.setDistanceInKm(distanceInKm);
+		trip.setToLocation(toLocation);
+		trip.setBill(distanceInKm*10);
+		trip.getDriver().getCab().setAvailable(false);
+		
 		List<TripBooking> list2 = driver.getTripBookingList();
 		list2.add(trip);
 
 		Customer customer = customerRepository2.findById(customerId).get();
-
 		List<TripBooking> list = customer.getTripBookingList();
 		list.add(trip);
 
 		trip.setCustomer(customer);
 
-	    tripBookingRepository2.save(trip);
+	   // tripBookingRepository2.save(trip);
 
 		return trip;
 
@@ -87,11 +88,11 @@ public class CustomerServiceImpl implements CustomerService {
 		//Cancel the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking trip = tripBookingRepository2.findById(tripId).get();
 		trip.setStatus(TripStatus.CANCELED);
-		// trip.setDistanceInKm(0);
-		// trip.setFromLocation(null);
-		// trip.setToLocation(null);
-		    
+		trip.setBill(0);
+		trip.getDriver().getCab().setAvailable(true);
 
+		tripBookingRepository2.save(trip);
+		
 
 	}
 
@@ -100,8 +101,9 @@ public class CustomerServiceImpl implements CustomerService {
 		//Complete the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking trip = tripBookingRepository2.findById(tripId).get();
 		trip.setStatus(TripStatus.COMPLETED);
-		
-		
+		trip.setBill(trip.getDistanceInKm()*trip.getDriver().getCab().getPerKmRate());
+		trip.getDriver().getCab().setAvailable(true);
+		tripBookingRepository2.save(trip);
 
 	}
 }
