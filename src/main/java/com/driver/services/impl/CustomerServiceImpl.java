@@ -49,14 +49,14 @@ public class CustomerServiceImpl implements CustomerService {
 		//Avoid using SQL query
         TripBooking trip = new TripBooking();
         
-		int id =-1;
+	    int id = Integer.MAX_VALUE;
 		List<Driver> drivers = driverRepository2.findAll();
 		for(Driver driver: drivers){
 		    if(driver.getCab().getAvailable()==true){
                 id = Math.min(id,driver.getDriverId());
 			}
 		}
-		if(id==-1){
+		if(id==Integer.MAX_VALUE){
 			throw new Exception("No cab available!");
 		}
 		Driver driver = driverRepository2.findById(id).get();
