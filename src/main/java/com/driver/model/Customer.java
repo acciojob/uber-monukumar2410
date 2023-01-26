@@ -59,7 +59,7 @@ public class Customer {
      
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<TripBooking> tripBookingList;
+    private List<TripBooking> tripBookingList = new ArrayList<>();
 
     public List<TripBooking> getTripBookingList() {
         return tripBookingList;

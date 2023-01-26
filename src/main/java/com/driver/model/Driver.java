@@ -2,6 +2,7 @@ package com.driver.model;
 
 import javax.persistence.Id;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -31,7 +32,7 @@ public class Driver {
 
     @OneToMany(mappedBy = "driver",cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<TripBooking> tripBookingList;
+    private List<TripBooking> tripBookingList = new ArrayList<>();
 
     public Driver() {
     }
